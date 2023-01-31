@@ -1,0 +1,213 @@
+import React, { FC, Fragment, useState } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { Dialog, Transition } from '@headlessui/react';
+import useLocalStorage from '../../hooks';
+import CreateUserKeys from '../../Components/CreateUserKeys';
+
+const NAME_DEFAULT = ['Satoshi', 'Nakamoto'];
+const EMAIL_DEFAULT = 'hi@getlunchmoney.com';
+
+export type Inputs = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  gender: ['Male', 'Female'];
+  age: number;
+  location: string;
+};
+
+type SettingsComponentType = FC<{
+  isOpen: boolean;
+  closeModal: () => void;
+}>;
+
+const Settings: SettingsComponentType = ({ isOpen, closeModal }) => {
+  const [userData, setUserData] = useLocalStorage('lunchMoneyUser', {});
+  const [formSubmittion, setFormSubmittion] = useState<Inputs>();
+  const [isKeysLoading, setIsKeysLoading] = useState(false);
+  const [keys, setKeys] = useState<{ privateKey: string; publicKey: string }>();
+  const {
+    register,
+    handleSubmit,
+    formState: { isDirty, errors, isSubmitSuccessful, isSubmitting },
+  } = useForm<Inputs>({ defaultValues: userData });
+  const onSubmit: SubmitHandler<Inputs> = (lunchMoneyUser) => {
+    console.log('k did it', lunchMoneyUser);
+    setUserData(lunchMoneyUser);
+    chrome.storage.local.set({ lunchMoneyUser });
+    // return new Promise<void>(async (resolve, reject) => {
+    //   try {
+    //     const { privateKey, publicKey } = await openpgp.generateKey({
+    //       type: 'rsa', // Type of the key
+    //       rsaBits: 4096, // RSA key size (defaults to 4096 bits)
+    //       userIDs: [data], // you can pass multiple user IDs
+    //       passphrase: 'foooo',
+    //     });
+    //     setKeys({ privateKey, publicKey });
+    //     resolve();
+    //   } catch (error) {
+    //     reject(error);
+    //   }
+    // });
+  };
+
+  return (
+    <Transition appear show={isOpen} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-black bg-opacity-25" />
+        </Transition.Child>
+
+        <div className="fixed flex inset-0 overflow-y-auto">
+          <div className="flex flex-1 justify-end mt-10 p-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel className="flex flex-col w-full max-w-md transform overflow-hidden rounded-lg bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Title
+                  as="h3"
+                  className="text-lg font-medium leading-6 text-gray-900"
+                >
+                  Settings
+                </Dialog.Title>
+                <div className="flex flex-1 flex-col">
+                  {!isSubmitting && !isSubmitSuccessful && (
+                    <form
+                      noValidate
+                      className="flex flex-1 flex-col justify-between"
+                      onSubmit={handleSubmit(onSubmit)}
+                    >
+                      <label>
+                        <span>First Name</span>
+                        <input
+                          type="text"
+                          className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
+                          placeholder={NAME_DEFAULT[0]}
+                          {...register('firstName', {
+                            required: true,
+                          })}
+                        />
+                      </label>{' '}
+                      <label>
+                        <span>Last Name</span>
+                        <input
+                          type="text"
+                          className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
+                          placeholder={NAME_DEFAULT[1]}
+                          {...register('lastName', {
+                            required: true,
+                          })}
+                        />
+                      </label>
+                      <label>
+                        <span>Your email address</span>
+                        <div
+                          className="flex justify-between
+                                    py-1
+                                    mt-1
+                                    w-full
+                                    bg-gray-100
+                                    border-transparent
+                                    rounded-md
+                                    focus-within:outline-none
+                                    focus-within:outline-blue-600
+                                    focus-within:outline-1"
+                        >
+                          <input
+                            type="email"
+                            className="grow border-0 bg-transparent focus:ring-0"
+                            placeholder={EMAIL_DEFAULT}
+                            {...register('email', {
+                              required: true,
+                            })}
+                          />
+                          <div className="flex justify-center items-center w-12">
+                            {errors.email || !isDirty ? (
+                              <span className="text-3xl leading-none opacity-50">
+                                ☑️
+                              </span>
+                            ) : isDirty ? (
+                              <span className="text-xl leading-none">✅</span>
+                            ) : (
+                              <span className="text-3xl leading-none opacity-50">
+                                ☑️
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </label>
+                      <div className="">
+                        <label>
+                          <span>Gender</span>
+                          <select
+                            className="
+                            block
+                            w-full
+                            mt-1
+                            rounded-md
+                            bg-gray-100
+                            border-transparent
+                            focus:border-gray-500 focus:bg-white focus:ring-0"
+                            {...register('gender', { required: true })}
+                          >
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                            <option value="other">Other</option>
+                          </select>
+                        </label>
+                      </div>
+                      <div>
+                        <label>
+                          <span>Age</span>
+                          <input
+                            className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
+                            type="text"
+                            {...register('age', { required: true })}
+                          />
+                        </label>
+                      </div>
+                      <div>
+                        <label>
+                          <span>Zip Code</span>
+                          <input
+                            className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
+                            type="text"
+                            {...register('location', { required: true })}
+                          />
+                        </label>
+                      </div>
+                      <input
+                        type="submit"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-dark-mode px-4 py-4 text-lg font-medium text-white hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      />
+                    </form>
+                  )}
+                  {isSubmitting && <CreateUserKeys isLoading={true} />}
+                  {isSubmitSuccessful && keys && (
+                    <CreateUserKeys isLoading={false} keys={keys} />
+                  )}
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
+          </div>
+        </div>
+      </Dialog>
+    </Transition>
+  );
+};
+
+export default Settings;
