@@ -33,5 +33,11 @@
   "omnibox": {
     "keyword": "lunchmoney"
   },
-  "permissions": ["tabs", "storage", "webRequest", "activeTab"]
+  "permissions": [
+    "tabs",
+    "storage",
+    "webRequest",
+    "activeTab",
+    "unlimitedStorage"
+  ]
 }

@@ -1,8 +1,7 @@
 import React, { FC, Fragment, useState } from 'react';
+import browser from 'webextension-polyfill';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Dialog, Transition } from '@headlessui/react';
-import useLocalStorage from '../../hooks';
-import CreateUserKeys from '../../Components/CreateUserKeys';
 
 const NAME_DEFAULT = ['Satoshi', 'Nakamoto'];
 const EMAIL_DEFAULT = 'hi@getlunchmoney.com';
@@ -22,33 +21,23 @@ type SettingsComponentType = FC<{
 }>;
 
 const Settings: SettingsComponentType = ({ isOpen, closeModal }) => {
-  const [userData, setUserData] = useLocalStorage('lunchMoneyUser', {});
-  const [formSubmittion, setFormSubmittion] = useState<Inputs>();
-  const [isKeysLoading, setIsKeysLoading] = useState(false);
-  const [keys, setKeys] = useState<{ privateKey: string; publicKey: string }>();
   const {
     register,
     handleSubmit,
     formState: { isDirty, errors, isSubmitSuccessful, isSubmitting },
-  } = useForm<Inputs>({ defaultValues: userData });
+  } = useForm({
+    defaultValues: async () =>
+      browser.storage.local.get('profile').then((result) => {
+        return result.profile;
+      }),
+  });
+
   const onSubmit: SubmitHandler<Inputs> = (lunchMoneyUser) => {
-    console.log('k did it', lunchMoneyUser);
-    setUserData(lunchMoneyUser);
-    chrome.storage.local.set({ lunchMoneyUser });
-    // return new Promise<void>(async (resolve, reject) => {
-    //   try {
-    //     const { privateKey, publicKey } = await openpgp.generateKey({
-    //       type: 'rsa', // Type of the key
-    //       rsaBits: 4096, // RSA key size (defaults to 4096 bits)
-    //       userIDs: [data], // you can pass multiple user IDs
-    //       passphrase: 'foooo',
-    //     });
-    //     setKeys({ privateKey, publicKey });
-    //     resolve();
-    //   } catch (error) {
-    //     reject(error);
-    //   }
-    // });
+    browser.runtime.sendMessage({
+      application: 'LUNCH_MONEY',
+      action: 'updateProfile',
+      payload: lunchMoneyUser,
+    });
   };
 
   return (
@@ -195,10 +184,6 @@ const Settings: SettingsComponentType = ({ isOpen, closeModal }) => {
                         className="inline-flex justify-center rounded-md border border-transparent bg-dark-mode px-4 py-4 text-lg font-medium text-white hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       />
                     </form>
-                  )}
-                  {isSubmitting && <CreateUserKeys isLoading={true} />}
-                  {isSubmitSuccessful && keys && (
-                    <CreateUserKeys isLoading={false} keys={keys} />
                   )}
                 </div>
               </Dialog.Panel>

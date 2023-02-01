@@ -2,7 +2,7 @@ import browser from 'webextension-polyfill';
 
 browser.runtime
   .sendMessage({
-    application: 'lunchMoney',
+    application: 'LUNCH_MONEY',
     apiKey: window.sessionStorage.getItem('lunchMoneyKey'),
   })
   .then((data) => {

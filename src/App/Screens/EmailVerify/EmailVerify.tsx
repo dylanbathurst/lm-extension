@@ -17,7 +17,11 @@ const EmailVerify: FC<{}> = (props) => {
   const { register, handleSubmit } = useForm<Inputs>();
   let navigate = useNavigate();
   const onSubmit: SubmitHandler<Inputs> = async (lunchMoneyUser) => {
-    await browser.storage.local.set({ lunchMoneyUser });
+    browser.runtime.sendMessage({
+      application: 'LUNCH_MONEY',
+      action: 'updateProfile',
+      payload: lunchMoneyUser,
+    });
     navigate('/dashboard');
   };
   return (

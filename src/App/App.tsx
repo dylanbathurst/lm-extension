@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import browser from 'webextension-polyfill';
 import { hot } from 'react-hot-loader/root';
 import { Landing } from './Screens/Landing';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -7,16 +8,19 @@ import { AdditionalInfo } from './Screens/AdditionalInfo';
 import { BasicInfo } from './Screens/BasicInfo';
 import { Dashboard } from './Screens/Dashboard';
 import { OnboardSuccess } from './Screens/OnboardSuccess';
-import { Inputs } from './Screens/EmailVerify/EmailVerify';
+import { ProfileType } from '../Background/actions';
 
 const App: React.FC = () => {
-  const [session, setSession] = useState<Inputs | null>(null);
+  const [session, setSession] = useState<ProfileType | null>(null);
 
   useEffect(() => {
-    const user = localStorage.getItem('lunchMoneyUser');
-    if (user) {
-      setSession(JSON.parse(user));
-    }
+    const fetchUser = async () => {
+      const user = (await browser.storage.local.get('profile')) as ProfileType;
+      if (user) {
+        setSession(user);
+      }
+    };
+    fetchUser();
   }, []);
 
   return (
