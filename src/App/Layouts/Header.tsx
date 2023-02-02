@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import browser from 'webextension-polyfill';
 import { BellIcon, GearIcon } from '@bitcoin-design/bitcoin-icons-react/filled';
 import { Link } from 'react-router-dom';
 // @ts-ignore
@@ -13,7 +14,10 @@ const Header: FC = () => {
   };
 
   const openModal = () => {
-    setIsOpen(true);
+    // setIsOpen(true);
+    browser.tabs.create({
+      url: browser.runtime.getURL('/options.html#/settings'),
+    });
   };
 
   return (

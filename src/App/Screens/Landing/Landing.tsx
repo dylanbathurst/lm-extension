@@ -17,14 +17,12 @@ const Landing: FC = () => {
     };
   });
   return (
-    <Primary>
-      <div className="flex basis-full justify-center content-center">
-        <div className="flex flex-col justify-center justify-items-center items-center content-center text-white">
-          <img src={logo} width="72" alt="Referify Logo" />
-          <h1 className="font-black text-4xl pt-8">Lunch Money</h1>
-        </div>
+    <div className="flex basis-full justify-center content-center">
+      <div className="flex flex-col justify-center justify-items-center items-center content-center text-white">
+        <img src={logo} width="72" alt="Referify Logo" />
+        <h1 className="font-black text-4xl pt-8">Lunch Money</h1>
       </div>
-    </Primary>
+    </div>
   );
 };
 

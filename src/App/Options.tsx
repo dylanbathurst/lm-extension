@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import browser from 'webextension-polyfill';
 import { hot } from 'react-hot-loader/root';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
-
-import { Primary } from './Layouts';
 import { Landing } from './Screens/Landing';
-import { EmailVerify } from './Screens/EmailVerify';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import { Dashboard } from './Screens/Dashboard';
-
 import { ProfileType } from '../Background/actions';
+import { Settings } from './Screens/Settings';
+import { Primary } from './Layouts';
 
 const App: React.FC = () => {
   const [session, setSession] = useState<ProfileType | null>(null);
@@ -24,15 +22,17 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <MemoryRouter>
+    <HashRouter>
       <Routes>
-        <Route path="/" element={<Primary header />}>
+        <Route path="/" element={<Primary />}>
           <Route index element={session ? <Dashboard /> : <Landing />} />
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="email-verify" element={<EmailVerify />} />
+          <Route
+            path="settings"
+            element={<Settings closeModal={() => {}} isOpen={true} />}
+          />
         </Route>
       </Routes>
-    </MemoryRouter>
+    </HashRouter>
   );
 };
 

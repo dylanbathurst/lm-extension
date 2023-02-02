@@ -25,22 +25,21 @@ const EmailVerify: FC<{}> = (props) => {
     navigate('/dashboard');
   };
   return (
-    <Primary>
-      <div className="flex flex-col flex-1">
-        <div className="flex flex-1 flex-col">
-          <div className="flex flex-col justify-center items-center px-7 mt-40 text-white">
-            <img className="" src={email} width="40" alt="email icon" />
-            <h1 className="text-2xl mt-10 font-extrabold">Enter Your Email</h1>
-          </div>
-          <form
-            noValidate
-            className="flex flex-1 flex-col justify-between pt-2"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <div className="px-10">
-              <label>
-                <div
-                  className="flex justify-between
+    <div className="flex flex-col flex-1">
+      <div className="flex flex-1 flex-col">
+        <div className="flex flex-col justify-center items-center px-7 mt-40 text-white">
+          <img className="" src={email} width="40" alt="email icon" />
+          <h1 className="text-2xl mt-10 font-extrabold">Enter Your Email</h1>
+        </div>
+        <form
+          noValidate
+          className="flex flex-1 flex-col justify-between pt-2"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <div className="px-10">
+            <label>
+              <div
+                className="flex justify-between
                     py-1
                     mt-1
                     w-full
@@ -52,30 +51,29 @@ const EmailVerify: FC<{}> = (props) => {
                     focus-within:outline-none
                     focus-within:outline-blue-600
                     focus-within:outline-1"
-                >
-                  <input
-                    type="email"
-                    className="grow border-0 bg-transparent focus:ring-0"
-                    placeholder={EMAIL_DEFAULT}
-                    {...register('email', {
-                      required: true,
-                    })}
-                  />
-                </div>
-              </label>
-              <p className="text-white text-center pt-2">
-                Your email address is masked by default.
-              </p>
-            </div>
-            <input
-              type="submit"
-              value="Get Started"
-              className="text-lg rounded-md bg-b-orange mt-2 py-3 font-medium text-dark-mode"
-            />
-          </form>
-        </div>
+              >
+                <input
+                  type="email"
+                  className="grow border-0 bg-transparent focus:ring-0"
+                  placeholder={EMAIL_DEFAULT}
+                  {...register('email', {
+                    required: true,
+                  })}
+                />
+              </div>
+            </label>
+            <p className="text-white text-center pt-2">
+              Your email address is masked by default.
+            </p>
+          </div>
+          <input
+            type="submit"
+            value="Get Started"
+            className="text-lg rounded-md bg-b-orange mt-2 py-3 font-medium text-dark-mode"
+          />
+        </form>
       </div>
-    </Primary>
+    </div>
   );
 };
 
