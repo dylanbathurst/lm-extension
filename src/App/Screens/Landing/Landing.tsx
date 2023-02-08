@@ -1,5 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../Components/AuthProvider/AuthProvider';
 
 import { Primary } from '../../Layouts';
 // @ts-ignore
@@ -7,15 +8,12 @@ import logo from '../../logo.svg';
 
 const Landing: FC = () => {
   let navigate = useNavigate();
+  const auth = useAuth();
   useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate('email-verify');
-    }, 3000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  });
+    if (auth.user) {
+      navigate('dashboard');
+    }
+  }, [auth.user]);
   return (
     <div className="flex basis-full justify-center content-center">
       <div className="flex flex-col justify-center justify-items-center items-center content-center text-white">

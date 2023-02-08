@@ -76,7 +76,7 @@ const Settings: SettingsComponentType = ({ isOpen, closeModal }) => {
                 </label>
                 <label>
                   <span>Your email address</span>
-                  <div className="flex justify-between py-1 mt-1 w-full bg-gray-100 bg-opacity-10 border-transparent rounded-md focus:border-2 focus:border-gray-500 focus:ring-1">
+                  <div className="flex justify-between py-1 mt-1 w-full bg-gray-100 bg-opacity-10 border-transparent rounded-md focus-within:border focus-within:border-gray-500 focus-within:ring-0">
                     <input
                       type="email"
                       className="grow border-0 bg-transparent focus:border-gray-500 focus:ring-0"
@@ -85,19 +85,6 @@ const Settings: SettingsComponentType = ({ isOpen, closeModal }) => {
                         required: true,
                       })}
                     />
-                    <div className="flex justify-center items-center w-12">
-                      {errors.email || !isDirty ? (
-                        <span className="text-3xl leading-none opacity-50">
-                          ☑️
-                        </span>
-                      ) : isDirty ? (
-                        <span className="text-xl leading-none">✅</span>
-                      ) : (
-                        <span className="text-3xl leading-none opacity-50">
-                          ☑️
-                        </span>
-                      )}
-                    </div>
                   </div>
                 </label>
                 <div className="">

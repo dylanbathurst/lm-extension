@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import browser from 'webextension-polyfill';
 
 import { Primary } from '../../Layouts';
+import { useAuth } from '../../Components/AuthProvider/AuthProvider';
 // @ts-ignore
 import email from '../../email.svg';
 
@@ -14,16 +15,24 @@ export type Inputs = {
 };
 
 const EmailVerify: FC<{}> = (props) => {
-  const { register, handleSubmit } = useForm<Inputs>();
+  const auth = useAuth();
   let navigate = useNavigate();
+  const { register, handleSubmit } = useForm<Inputs>();
+
   const onSubmit: SubmitHandler<Inputs> = async (lunchMoneyUser) => {
-    browser.runtime.sendMessage({
-      application: 'LUNCH_MONEY',
-      action: 'updateProfile',
-      payload: lunchMoneyUser,
-    });
-    navigate('/dashboard');
+    browser.runtime
+      .sendMessage({
+        application: 'LUNCH_MONEY',
+        action: 'updateProfile',
+        payload: lunchMoneyUser,
+      })
+      .then(() => {
+        auth.signin(() => {
+          navigate('/dashboard');
+        });
+      });
   };
+
   return (
     <div className="flex flex-col flex-1">
       <div className="flex flex-1 flex-col">

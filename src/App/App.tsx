@@ -1,38 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import browser from 'webextension-polyfill';
 import { hot } from 'react-hot-loader/root';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 
 import { Primary } from './Layouts';
 import { Landing } from './Screens/Landing';
 import { EmailVerify } from './Screens/EmailVerify';
 import { Dashboard } from './Screens/Dashboard';
 
-import { ProfileType } from '../Background/actions';
+import AuthProvider, { RequireAuth } from './Components/AuthProvider';
 
 const App: React.FC = () => {
-  const [session, setSession] = useState<ProfileType | null>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const user = (await browser.storage.local.get('profile')) as ProfileType;
-      if (user) {
-        setSession(user);
-      }
-    };
-    fetchUser();
-  }, []);
-
   return (
-    <MemoryRouter>
-      <Routes>
-        <Route path="/" element={<Primary header />}>
-          <Route index element={session ? <Dashboard /> : <Landing />} />
-          <Route path="dashboard" element={<Dashboard />} />
+    <HashRouter>
+      <AuthProvider>
+        <Routes>
           <Route path="email-verify" element={<EmailVerify />} />
-        </Route>
-      </Routes>
-    </MemoryRouter>
+          <Route
+            path="/"
+            element={
+              <RequireAuth>
+                <Primary header />
+              </RequireAuth>
+            }
+          >
+            <Route index element={<Landing />} />
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
+    </HashRouter>
   );
 };
 

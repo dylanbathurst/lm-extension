@@ -6,11 +6,11 @@ browser.runtime
     apiKey: window.sessionStorage.getItem('lunchMoneyKey'),
   })
   .then((data) => {
-    if (!data.lunchMoneyUser) return null;
-    window.sessionStorage.setItem(
-      'lunchMoneyUser',
-      JSON.stringify(data.lunchMoneyUser)
-    );
+    // if (!data.lunchMoneyUser) return null;
+    // window.sessionStorage.setItem(
+    //   'lunchMoneyUser',
+    //   JSON.stringify(data.lunchMoneyUser)
+    // );
   });
 
 export {};
