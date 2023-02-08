@@ -2,6 +2,7 @@ import React, { FC, Fragment, useState } from 'react';
 import browser from 'webextension-polyfill';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Dialog, Transition } from '@headlessui/react';
+import Card from '../../Components/Card';
 
 const NAME_DEFAULT = ['Satoshi', 'Nakamoto'];
 const EMAIL_DEFAULT = 'hi@getlunchmoney.com';
@@ -41,17 +42,13 @@ const Settings: SettingsComponentType = ({ isOpen, closeModal }) => {
   };
 
   return (
-    <div className="fixed flex inset-0 overflow-y-auto text-white">
-      <div className="flex flex-1 justify-end mt-10 p-4 text-center">
-        <div className="flex flex-col w-full transform overflow-hidden rounded-lg bg-white bg-opacity-10 p-6 text-left align-middle shadow-xl transition-all">
-          <h3 className="text-lg">Settings</h3>
-          <div className="flex flex-1 flex-col">
-            {!isSubmitting && !isSubmitSuccessful && (
-              <form
-                noValidate
-                className="flex flex-1 flex-col justify-between"
-                onSubmit={handleSubmit(onSubmit)}
-              >
+    <div className="flex flex-1 flex-col w-full text-white transform overflow-hidden">
+      <h3 className="text-lg">Settings</h3>
+      <div className="flex flex-1">
+        {!isSubmitting && !isSubmitSuccessful && (
+          <form noValidate className="" onSubmit={handleSubmit(onSubmit)}>
+            <div className="flex flex-1 flex-wrap justify-between gap-4">
+              <Card>
                 <label>
                   <span>First Name</span>
                   <input
@@ -62,7 +59,9 @@ const Settings: SettingsComponentType = ({ isOpen, closeModal }) => {
                       required: true,
                     })}
                   />
-                </label>{' '}
+                </label>
+              </Card>
+              <Card>
                 <label>
                   <span>Last Name</span>
                   <input
@@ -74,60 +73,61 @@ const Settings: SettingsComponentType = ({ isOpen, closeModal }) => {
                     })}
                   />
                 </label>
+              </Card>
+              <Card>
                 <label>
                   <span>Your email address</span>
-                  <div className="flex justify-between py-1 mt-1 w-full bg-gray-100 bg-opacity-10 border-transparent rounded-md focus-within:border focus-within:border-gray-500 focus-within:ring-0">
-                    <input
-                      type="email"
-                      className="grow border-0 bg-transparent focus:border-gray-500 focus:ring-0"
-                      placeholder={EMAIL_DEFAULT}
-                      {...register('email', {
-                        required: true,
-                      })}
-                    />
-                  </div>
+                  <input
+                    type="email"
+                    className="mt-1 block w-full rounded-md bg-gray-100 bg-opacity-10 border-transparent focus:border-gray-500 focus:ring-0"
+                    placeholder={EMAIL_DEFAULT}
+                    {...register('email', {
+                      required: true,
+                    })}
+                  />
                 </label>
-                <div className="">
-                  <label>
-                    <span>Gender</span>
-                    <select
-                      className="block w-full mt-1 rounded-md bg-gray-100 bg-opacity-10 border-transparent focus:border-gray-500 focus:ring-0"
-                      {...register('gender', { required: true })}
-                    >
-                      <option value="female">Female</option>
-                      <option value="male">Male</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    <span>Age</span>
-                    <input
-                      className="mt-1 block w-full rounded-md bg-gray-100 bg-opacity-10 border-transparent focus:border-gray-500 focus:ring-0"
-                      type="text"
-                      {...register('age', { required: true })}
-                    />
-                  </label>
-                </div>
-                <div>
-                  <label>
-                    <span>Zip Code</span>
-                    <input
-                      className="mt-1 block w-full rounded-md bg-gray-100 bg-opacity-10 border-transparent focus:border-gray-500 focus:ring-0"
-                      type="text"
-                      {...register('location', { required: true })}
-                    />
-                  </label>
-                </div>
-                <input
-                  type="submit"
-                  className="inline-flex justify-center rounded-md border border-transparent bg-dark-mode px-4 py-4 text-lg font-medium text-white hover:bg-opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                />
-              </form>
-            )}
-          </div>
-        </div>
+              </Card>
+              <Card>
+                <label>
+                  <span>Gender</span>
+                  <select
+                    className="block w-full mt-1 rounded-md bg-gray-100 bg-opacity-10 border-transparent focus:border-gray-500 focus:ring-0"
+                    {...register('gender', { required: true })}
+                  >
+                    <option value="female">Female</option>
+                    <option value="male">Male</option>
+                    <option value="other">Other</option>
+                  </select>
+                </label>
+              </Card>
+              <Card>
+                <label>
+                  <span>Age</span>
+                  <input
+                    className="mt-1 block w-full rounded-md bg-gray-100 bg-opacity-10 border-transparent focus:border-gray-500 focus:ring-0"
+                    type="text"
+                    {...register('age', { required: true })}
+                  />
+                </label>
+              </Card>
+              <Card>
+                <label>
+                  <span>Zip Code</span>
+                  <input
+                    className="mt-1 block w-full rounded-md bg-gray-100 bg-opacity-10 border-transparent focus:border-gray-500 focus:ring-0"
+                    type="text"
+                    {...register('location', { required: true })}
+                  />
+                </label>
+              </Card>
+            </div>
+            <input
+              type="submit"
+              value="Update"
+              className="inline-flex justify-center rounded-md border border-transparent bg-dark-mode px-4 py-4 text-lg font-medium text-white hover:bg-opacity-80 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+            />
+          </form>
+        )}
       </div>
     </div>
   );
