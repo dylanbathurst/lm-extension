@@ -4,8 +4,8 @@ import { Switch } from '@headlessui/react';
 const Card: FC = ({ children }) => {
   const [enabled, setEnabled] = useState(true);
   return (
-    <div className="flex flex-col relative bg-white bg-opacity-10 rounded-lg p-6 flex-grow text-left align-middle shadow-xl transition-all">
-      <div className="absolute right-3 top-3">
+    <div className="flex relative gap-4 bg-black/5 dark:bg-white/5 rounded-lg p-6 text-left align-middle transition-all">
+      <div className="absolute right-6 top-3">
         <Switch checked={enabled} onChange={setEnabled} as={Fragment}>
           {({ checked }) => (
             <button

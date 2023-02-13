@@ -14,7 +14,6 @@ const Header: FC = () => {
   };
 
   const openModal = () => {
-    // setIsOpen(true);
     browser.tabs.create({
       url: browser.runtime.getURL('/options.html#/settings'),
     });

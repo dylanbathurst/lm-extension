@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import browser from 'webextension-polyfill';
-import { hot } from 'react-hot-loader/root';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 
 import { Primary } from './Layouts';
@@ -33,4 +32,4 @@ const App: React.FC = () => {
   );
 };
 
-export default hot(App);
+export default App;

@@ -12,7 +12,7 @@ export type ProfileType = {
 type ActionPayloads = Partial<ProfileType>;
 type ActionTypes = 'updateProfile';
 
-type MessageType = {
+export type MessageType = {
   application?: string;
   action?: ActionTypes;
   payload: ActionPayloads;
@@ -28,6 +28,7 @@ const actionParser = async (message: MessageType) => {
       await browser.storage.local.set({
         profile: message.payload,
       });
+      console.log('did it', message.payload);
       break;
     default:
       return;
