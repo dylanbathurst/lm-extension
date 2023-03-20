@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "version": "0.0.1",
+  "short_name": "lunchmoney",
+  "name": "LunchMoney Extension",
+  "description": "Control your online data",
+  "action": {
+    "default_title": "LunchMoney | Control your online data",
+    "default_popup": "popup.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "background": {
+    "service_worker": "background.bundle.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["file://*/*", "http://*/*", "https://*/*"],
+      "run_at": "document_start",
+      "js": ["contentScript.bundle.js"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self';"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["inpageScript.bundle.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "icons": {
+    "16": "icon-16.png",
+    "48": "icon-48.png",
+    "128": "icon-128.png"
+  },
+  "omnibox": {
+    "keyword": "lunchmoney"
+  },
+  "permissions": [
+    "tabs",
+    "storage",
+    "webRequest",
+    "activeTab",
+    "unlimitedStorage"
+  ]
+}
