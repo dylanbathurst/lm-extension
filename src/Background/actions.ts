@@ -1,5 +1,8 @@
 import browser from 'webextension-polyfill';
-import { RootState } from './store';
+import { createInvoice, listInvoices } from 'lib/api';
+import { RootState, store } from './store';
+import { defaultConnection } from './walletConnectionSlice';
+import { userProfile } from './userProfileSlice';
 
 export type ProfileType = {
   firstName: string;
@@ -13,7 +16,7 @@ export type ProfileType = {
 export type MessageType = {
   application?: string;
 } & {
-  action: 'requestUser';
+  action: 'requestUser' | 'listInvoices';
   payload: { origin: string };
 };
 
@@ -21,21 +24,30 @@ const actionParser = async (message: MessageType) => {
   if (message.application !== 'LUNCH_MONEY' || !message.action) {
     return;
   }
+  const profile = userProfile(store.getState());
+  const connection = defaultConnection(store.getState());
+
+  if (!connection) throw new Error('No node connection');
+
+  const { url, macaroon } = connection;
+
   switch (message.action) {
+    case 'listInvoices':
+      const invoicesRes = await listInvoices({ url, macaroon });
+      const invoices = await invoicesRes.json();
+      console.log(invoices);
+      return invoices;
     case 'requestUser':
-      console.log('gettign here');
-      let tabs = await browser.tabs.query({ active: true });
-
       // Check if the message sender is also the active tab url
-      tabs = tabs.filter((tab) =>
-        String(tab.url).startsWith(message.payload.origin)
-      );
+      // let tabs = await browser.tabs.query({ active: true });
+      // tabs = tabs.filter((tab) =>
+      //   String(tab.url).startsWith(message.payload.origin)
+      // );
 
-      const lmUser = (await browser.storage.sync.get('LM_STORE')) as {
-        LM_STORE: RootState;
-      };
-      const profile = lmUser.LM_STORE.userProfile;
-      return { profile };
+      const invoiceRes = await createInvoice({ url, macaroon });
+      const invoice = await invoiceRes.json();
+      const { payment_request } = invoice;
+      return { profile, payment_request };
     default:
       return;
   }

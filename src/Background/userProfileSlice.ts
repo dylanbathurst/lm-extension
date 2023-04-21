@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from './store';
 
 export type ProfileType = {
   firstName?: string;
@@ -19,7 +20,13 @@ export const userProfileSlice = createSlice({
     updateProfile: (state, action: PayloadAction<ProfileType>) => {
       return { ...state, ...action.payload };
     },
+    removeProfile: () => {
+      return undefined;
+    },
   },
 });
 
 export const { actions, reducer } = userProfileSlice;
+
+// selectors
+export const userProfile = (state: RootState) => state.userProfile;

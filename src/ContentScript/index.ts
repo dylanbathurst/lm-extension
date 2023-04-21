@@ -1,4 +1,4 @@
-import { requestUser } from '../lib/messages';
+import { requestUser } from 'lib/messages';
 import injectScript from './injectScript';
 
 injectScript();

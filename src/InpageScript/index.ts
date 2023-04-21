@@ -1,4 +1,4 @@
-import { ProfileType } from '../Background/actions';
+import { ProfileType } from 'Background/actions';
 
 class LunchMoney {
   constructor() {
@@ -8,7 +8,7 @@ class LunchMoney {
         event: MessageEvent<{
           application: string;
           action: string;
-          payload: { profile: ProfileType };
+          payload: { profile: ProfileType; payment_request: string };
         }>
       ) => {
         if (
@@ -16,12 +16,15 @@ class LunchMoney {
           event.data.action !== 'profile'
         )
           return;
+
         this.profile = event.data.payload.profile;
+        this.payment_request = event.data.payload.payment_request;
       }
     );
   }
 
   profile?: ProfileType;
+  payment_request?: string;
 
   getProfile = () => {
     window.postMessage(

@@ -64,6 +64,10 @@ module.exports = {
   },
   resolve: {
     extensions: ['*', '.ts', '.tsx', '.mjs', '.js', '.jsx', '.json'],
+    alias: {
+      lib: path.resolve(__dirname, './src/lib/'),
+      Background: path.resolve(__dirname, './src/Background/'),
+    },
   },
   plugins: [
     new CleanWebpackPlugin(),

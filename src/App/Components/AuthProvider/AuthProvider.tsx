@@ -1,34 +1,36 @@
-import React, { useEffect } from 'react';
+import React, { createContext, ReactNode, useContext, useEffect } from 'react';
 import browser from 'webextension-polyfill';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { AuthContextType } from './types';
+import { useAppSelector } from 'Background/hooks';
 
-let AuthContext = React.createContext<AuthContextType>(null!);
+let AuthContext = createContext<AuthContextType>(null!);
 
-export default function AuthProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [user, setUser] = React.useState<any>(null);
+export default function AuthProvider({ children }: { children: ReactNode }) {
+  const userProfile = useAppSelector((state) => state.userProfile);
+  const [user, setUser] = React.useState(userProfile);
   const [loading, setLoading] = React.useState<boolean>(true);
   const location = useLocation();
   const navigate = useNavigate();
 
   let signin = (callback: VoidFunction) => {
-    browser.storage.sync.get('profile').then((result) => {
-      if (result.profile) {
-        setUser(result.profile);
-        callback();
-      }
-    });
+    if (user) {
+      callback();
+    }
+    // browser.storage.sync.get('profile').then((result) => {
+    //   if (result.profile) {
+    //     setUser(result.profile);
+    //     callback();
+    //   }
+    // });
   };
 
   let signout = (callback: VoidFunction) => {
-    browser.storage.sync.remove('profile').then(() => {
-      setUser(null);
-      callback();
-    });
+    callback();
+    // browser.storage.sync.remove('profile').then(() => {
+    //   setUser(null);
+    //   callback();
+    // });
   };
 
   useEffect(() => {
@@ -49,7 +51,7 @@ export default function AuthProvider({
 }
 
 export function useAuth() {
-  return React.useContext(AuthContext);
+  return useContext(AuthContext);
 }
 
 // function AuthStatus() {

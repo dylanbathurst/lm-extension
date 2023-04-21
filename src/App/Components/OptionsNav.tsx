@@ -4,7 +4,7 @@ import { SunIcon } from '@bitcoin-design/bitcoin-icons-react/filled';
 
 // @ts-ignore
 import logo from '../logo.svg';
-import { requestInfo } from '../../lib/messages';
+import { requestInfo } from 'lib/api';
 
 const OptionsNav: FC<{
   darkMode: boolean;

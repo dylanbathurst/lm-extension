@@ -27,10 +27,12 @@ export const walletConnectionSlice = createSlice({
   initialState,
   reducers: {
     addConnection: (state, action: PayloadAction<ConnectionType>) => {
-      console.log(action.payload);
       state.connections.push(action.payload);
+      state.default = action.payload;
     },
-    removeConnection: (state, action: PayloadAction<ConnectionType>) => {},
+    removeConnection: (state) => {
+      state.connections = [];
+    },
     setDefault: (state, action: PayloadAction<ConnectionIndex>) => {
       state.default = state.connections[action.payload];
     },
@@ -38,5 +40,9 @@ export const walletConnectionSlice = createSlice({
 });
 
 export const { actions, reducer } = walletConnectionSlice;
+
+// selectors
+export const defaultConnection = (state: RootState) =>
+  state.walletConnections.default;
 export const walletConnections = (state: RootState) =>
   state.walletConnections.connections;

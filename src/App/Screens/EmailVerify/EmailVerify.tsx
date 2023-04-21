@@ -2,8 +2,9 @@ import React, { FC } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import browser from 'webextension-polyfill';
+import { actions } from 'Background/userProfileSlice';
+import { useAppDispatch } from 'Background/hooks';
 
-import { Primary } from '../../Layouts';
 import { useAuth } from '../../Components/AuthProvider/AuthProvider';
 // @ts-ignore
 import email from '../../email.svg';
@@ -14,12 +15,14 @@ export type Inputs = {
   email: string;
 };
 
-const EmailVerify: FC<{}> = (props) => {
+const EmailVerify: FC = () => {
   const auth = useAuth();
   let navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const { register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (lunchMoneyUser) => {
+    dispatch(actions.updateProfile(lunchMoneyUser));
     browser.runtime
       .sendMessage({
         application: 'LUNCH_MONEY',

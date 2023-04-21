@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { actions, ProfileType } from 'Background/userProfileSlice';
+import { useAppDispatch, useAppSelector } from 'Background/hooks';
+
 import Card from '../../Components/Card';
-import { actions, ProfileType } from '../../../Background/userProfileSlice';
-import { useAppDispatch, useAppSelector } from '../../../Background/hooks';
 
 const NAME_DEFAULT = ['Satoshi', 'Nakamoto'];
 const EMAIL_DEFAULT = 'hi@getlunchmoney.com';
@@ -24,6 +25,7 @@ const Settings: SettingsComponentType = ({ isOpen, closeModal }) => {
   });
 
   const onSubmit: SubmitHandler<ProfileType> = (lunchMoneyUser) => {
+    console.log('dispathig it', lunchMoneyUser);
     dispatch(actions.updateProfile(lunchMoneyUser));
     alert('Updated Successfully');
   };

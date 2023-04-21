@@ -1,36 +1,41 @@
-import { configureStore } from '@reduxjs/toolkit';
-import browser from 'webextension-polyfill';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import {
-  reducer as walletConnectionReducer,
-  WalletConnection,
-} from './walletConnectionSlice';
-import { reducer as userProfileReducer, ProfileType } from './userProfileSlice';
+  persistReducer,
+  persistStore,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
+import { syncStorage } from 'redux-persist-webextension-storage';
 
-// @ts-ignore
-const customPersistor = (storeAPI) => (next) => (action) => {
-  let result = next(action);
-  browser.storage.sync.set({ LM_STORE: storeAPI.getState() });
-  return result;
+import { reducer as walletConnectionReducer } from './walletConnectionSlice';
+import { reducer as userProfileReducer } from './userProfileSlice';
+
+const rootPersistConfig = {
+  key: 'LM_STORE',
+  storage: syncStorage,
 };
 
-export const configureLMStore = (preloadedState: RootState) => {
-  const store = configureStore({
-    middleware: (getDefaultMiddleware) => {
-      return getDefaultMiddleware().concat(customPersistor);
-    },
-    reducer: {
-      walletConnections: walletConnectionReducer,
-      userProfile: userProfileReducer,
-    },
-    preloadedState,
-  });
+const rootReducer = combineReducers({
+  walletConnections: walletConnectionReducer,
+  userProfile: userProfileReducer,
+});
 
-  return store;
-};
+export const store = configureStore({
+  middleware: (getDefaultMiddleware) => {
+    return getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    });
+  },
+  devTools: true,
+  reducer: persistReducer(rootPersistConfig, rootReducer),
+});
 
-export type RootState = {
-  walletConnections: WalletConnection;
-  userProfile: ProfileType;
-};
+export const persistor = persistStore(store);
+export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
