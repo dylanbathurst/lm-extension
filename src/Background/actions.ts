@@ -43,8 +43,8 @@ const actionParser = async (message: MessageType) => {
       // tabs = tabs.filter((tab) =>
       //   String(tab.url).startsWith(message.payload.origin)
       // );
-
-      const invoiceRes = await createInvoice({ url, macaroon });
+      const memo = message.payload.origin;
+      const invoiceRes = await createInvoice({ url, macaroon, memo });
       const invoice = await invoiceRes.json();
       const { payment_request } = invoice;
       return { profile, payment_request };

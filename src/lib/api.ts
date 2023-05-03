@@ -60,14 +60,16 @@ export const listInvoices = ({
 export const createInvoice = ({
   url,
   macaroon,
+  memo,
 }: {
   url: string;
   macaroon: string;
+  memo: string;
 }) =>
   fetch(`${url}/v1/invoices`, {
     body: JSON.stringify({
       value: 10000,
-      memo: 'Lunch Money Invoice',
+      memo,
     }),
     method: 'POST',
     headers: {
