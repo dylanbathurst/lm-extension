@@ -1,3 +1,3 @@
-import Primary from './Primary';
+import Primary from './Primary'
 
-export { Primary };
+export { Primary }

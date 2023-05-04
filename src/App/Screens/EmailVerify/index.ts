@@ -1,3 +1,3 @@
-import EmailVerify from './EmailVerify';
+import EmailVerify from './EmailVerify'
 
-export { EmailVerify };
+export { EmailVerify }

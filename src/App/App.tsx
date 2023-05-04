@@ -1,15 +1,15 @@
-import React from 'react';
-import { HashRouter, Route, Routes } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
-import { store, persistor } from 'Background/store';
+import React from 'react'
+import { HashRouter, Route, Routes } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react'
+import { store, persistor } from 'Background/store'
 
-import { Primary } from './Layouts';
-import { Landing } from './Screens/Landing';
-import { EmailVerify } from './Screens/EmailVerify';
-import { Dashboard } from './Screens/Dashboard';
+import { Primary } from './Layouts'
+import { Landing } from './Screens/Landing'
+import { EmailVerify } from './Screens/EmailVerify'
+import { Dashboard } from './Screens/Dashboard'
 
-import AuthProvider, { RequireAuth } from './Components/AuthProvider';
+import AuthProvider, { RequireAuth } from './Components/AuthProvider'
 
 const App: React.FC = () => {
   return (
@@ -35,7 +35,7 @@ const App: React.FC = () => {
         </HashRouter>
       </PersistGate>
     </Provider>
-  );
-};
+  )
+}
 
-export default App;
+export default App

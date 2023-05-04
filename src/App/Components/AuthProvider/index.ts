@@ -1,4 +1,4 @@
-import AuthProvider, { RequireAuth } from './AuthProvider';
+import AuthProvider, { RequireAuth } from './AuthProvider'
 
-export { RequireAuth };
-export default AuthProvider;
+export { RequireAuth }
+export default AuthProvider

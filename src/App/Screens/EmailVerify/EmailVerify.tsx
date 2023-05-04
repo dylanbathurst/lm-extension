@@ -1,28 +1,28 @@
-import React, { FC } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import browser from 'webextension-polyfill';
-import { actions } from 'Background/userProfileSlice';
-import { useAppDispatch } from 'Background/hooks';
+import React, { FC } from 'react'
+import { useForm, SubmitHandler } from 'react-hook-form'
+import { useNavigate } from 'react-router-dom'
+import browser from 'webextension-polyfill'
+import { actions } from 'Background/userProfileSlice'
+import { useAppDispatch } from 'Background/hooks'
 
-import { useAuth } from '../../Components/AuthProvider/AuthProvider';
+import { useAuth } from '../../Components/AuthProvider/AuthProvider'
 // @ts-ignore
-import email from '../../email.svg';
+import email from '../../email.svg'
 
-const EMAIL_DEFAULT = 'hi@getlunchmoney.com';
+const EMAIL_DEFAULT = 'hi@getlunchmoney.com'
 
 export type Inputs = {
-  email: string;
-};
+  email: string
+}
 
 const EmailVerify: FC = () => {
-  const auth = useAuth();
-  let navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { register, handleSubmit } = useForm<Inputs>();
+  const auth = useAuth()
+  let navigate = useNavigate()
+  const dispatch = useAppDispatch()
+  const { register, handleSubmit } = useForm<Inputs>()
 
   const onSubmit: SubmitHandler<Inputs> = async (lunchMoneyUser) => {
-    dispatch(actions.updateProfile(lunchMoneyUser));
+    dispatch(actions.updateProfile(lunchMoneyUser))
     browser.runtime
       .sendMessage({
         application: 'LUNCH_MONEY',
@@ -31,10 +31,10 @@ const EmailVerify: FC = () => {
       })
       .then(() => {
         auth.signin(() => {
-          navigate('/dashboard');
-        });
-      });
-  };
+          navigate('/dashboard')
+        })
+      })
+  }
 
   return (
     <div className="flex flex-col flex-1">
@@ -86,7 +86,7 @@ const EmailVerify: FC = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default EmailVerify;
+export default EmailVerify

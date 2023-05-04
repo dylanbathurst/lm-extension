@@ -1,12 +1,12 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig } from 'axios'
 
-type NodeApiConfig = { url: string; macaroon: string };
+type NodeApiConfig = { url: string; macaroon: string }
 
 export default class NodeApi {
-  config: NodeApiConfig;
+  config: NodeApiConfig
 
   constructor(config: NodeApiConfig) {
-    this.config = config;
+    this.config = config
   }
 
   async request(params: AxiosRequestConfig) {
@@ -17,7 +17,7 @@ export default class NodeApi {
         'Content-Type': 'application/json',
         'Grpc-Metadata-macaroon': this.config.macaroon,
       },
-    };
-    await axios(requestConfig);
+    }
+    await axios(requestConfig)
   }
 }

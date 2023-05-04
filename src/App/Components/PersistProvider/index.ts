@@ -1,3 +1,3 @@
-import PersistProvider from './PersistProvider';
+import PersistProvider from './PersistProvider'
 
-export default PersistProvider;
+export default PersistProvider

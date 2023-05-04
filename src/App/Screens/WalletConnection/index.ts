@@ -1,3 +1,3 @@
-import WalletConnection from './WalletConnection';
+import WalletConnection from './WalletConnection'
 
-export default WalletConnection;
+export default WalletConnection
