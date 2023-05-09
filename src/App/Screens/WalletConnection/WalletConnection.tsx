@@ -3,12 +3,7 @@ import { Link } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
 import { actions, walletConnections } from 'Background/walletConnectionSlice'
 import { TrashIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
-import {
-  createInvoice,
-  getBalance,
-  requestInfo,
-  requestNodeInfo,
-} from 'lib/api'
+import { getBalance, requestInfo } from 'lib/api'
 import { useAppDispatch, useAppSelector } from 'Background/hooks'
 
 import Card from '../../Components/Card'

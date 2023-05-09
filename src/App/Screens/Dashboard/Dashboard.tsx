@@ -38,7 +38,7 @@ const Dashboard: React.FC = () => {
       </div>
       <div className="flex flex-1 rounded-2xl p-6 bg-base-300">
         <div className="flex flex-col basis-full justify-between content-center">
-          {invoices &&
+          {invoices?.length ? (
             invoices.map((invoice) => {
               return (
                 <>
@@ -49,7 +49,10 @@ const Dashboard: React.FC = () => {
                   <div className="divider"></div>
                 </>
               )
-            })}
+            })
+          ) : (
+            <span className="text-2xl self-center opacity-75">No Activity</span>
+          )}
         </div>
       </div>
     </>

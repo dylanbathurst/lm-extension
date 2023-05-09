@@ -32,6 +32,7 @@ export const walletConnectionSlice = createSlice({
     },
     removeConnection: (state) => {
       state.connections = []
+      state.default = undefined
     },
     setDefault: (state, action: PayloadAction<ConnectionIndex>) => {
       state.default = state.connections[action.payload]

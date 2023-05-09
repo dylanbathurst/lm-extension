@@ -17,7 +17,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["file://*/*", "http://*/*", "https://*/*"],
+      "matches": ["http://*/*", "https://*/*"],
       "run_at": "document_start",
       "js": ["contentScript.bundle.js"]
     }
@@ -39,11 +39,5 @@
   "omnibox": {
     "keyword": "lunchmoney"
   },
-  "permissions": [
-    "tabs",
-    "storage",
-    "webRequest",
-    "activeTab",
-    "unlimitedStorage"
-  ]
+  "permissions": ["tabs", "storage"]
 }
