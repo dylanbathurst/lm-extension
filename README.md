@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="100px" src="/packages/extension/src/App/logo.svg" />
+  <img width="100px" src="/src/App/logo.svg" />
 </p>
 
 # Lunchmoney - It's your data, get paid for it
