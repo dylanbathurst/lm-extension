@@ -69,14 +69,14 @@ const Wallet: FC = () => {
                     <div className="uppercase">{connection.provider}</div>
                   </div>
                 </div>
-                <div>
+                <div className="flex flex-col gap-2">
                   <button
                     onClick={handleRemoveConnection}
                     className="btn btn-primary bg-bitcoin"
                   >
                     <TrashIcon style={{ height: '32px', width: '32px' }} />
                   </button>
-                  {connection.balance} sats
+                  <span>{connection.balance} sats</span>
                 </div>
               </div>
             ))}
