@@ -20,12 +20,11 @@ const Settings: SettingsComponentType = ({ isOpen, closeModal }) => {
     register,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<ProfileType>({
+  } = useForm<Partial<ProfileType>>({
     defaultValues: async () => userProfile,
   })
 
-  const onSubmit: SubmitHandler<ProfileType> = (lunchMoneyUser) => {
-    console.log('dispathig it', lunchMoneyUser)
+  const onSubmit: SubmitHandler<Partial<ProfileType>> = (lunchMoneyUser) => {
     dispatch(actions.updateProfile(lunchMoneyUser))
     alert('Updated Successfully')
   }

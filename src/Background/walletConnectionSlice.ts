@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { RootState } from './store'
 
-interface ConnectionType {
+export interface ConnectionType {
   provider: 'lnd'
   url: string
   macaroon: string
@@ -36,6 +36,18 @@ export const walletConnectionSlice = createSlice({
     },
     setDefault: (state, action: PayloadAction<ConnectionIndex>) => {
       state.default = state.connections[action.payload]
+    },
+    updateConnection: (
+      state,
+      action: PayloadAction<{
+        index: ConnectionIndex
+        connection: ConnectionType
+      }>
+    ) => {
+      state.connections[action.payload.index] = {
+        ...state.connections[action.payload.index],
+        ...action.payload.connection,
+      }
     },
   },
 })

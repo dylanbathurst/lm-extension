@@ -1,7 +1,11 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useForm, SubmitHandler } from 'react-hook-form'
-import { actions, walletConnections } from 'Background/walletConnectionSlice'
+import {
+  ConnectionType,
+  actions,
+  walletConnections,
+} from 'Background/walletConnectionSlice'
 import { TrashIcon } from '@bitcoin-design/bitcoin-icons-react/filled'
 import { getBalance, requestInfo } from 'lib/api'
 import { useAppDispatch, useAppSelector } from 'Background/hooks'
@@ -23,25 +27,79 @@ const Wallet: FC = () => {
     formState: { isSubmitting },
   } = useForm<ConnectionFormType>()
 
+  const getNodeInfo = async ({ url, macaroon }: ConnectionFormType) => {
+    // if connection is not success full, I need to alert the user that it might be because of
+    // TLS Cert issue. they should open the url in their browser, click advanced, and click proceed
+    const infoReq = await requestInfo({ url, macaroon })
+    const nodeInfo: ConnectionType = await infoReq.json()
+    return nodeInfo
+  }
+
+  const getNodeBalance = async ({ url, macaroon }: ConnectionFormType) => {
+    const balanceReq = await getBalance({ url, macaroon })
+    const { balance }: { balance: number } = await balanceReq.json()
+    return balance
+  }
+
+  const setNodeConnection = async ({ url, macaroon }: ConnectionFormType) => {
+    const nodeInfo = await getNodeInfo({ url, macaroon })
+    const balance = await getNodeBalance({ url, macaroon })
+
+    if (!nodeInfo || !balance) {
+      alert('Invalid Connection')
+      return
+    }
+
+    dispatch(
+      actions.addConnection({
+        provider: 'lnd',
+        macaroon,
+        url,
+        alias: nodeInfo.alias,
+        balance,
+      })
+    )
+  }
+
   const onSubmit: SubmitHandler<ConnectionFormType> = async ({
     url,
     macaroon,
   }) => {
-    // if connection is not success full, I need to alert the user that it might be because of
-    // TLS Cert issue. they should open the url in their browser, click advanced, and click proceed
-    const infoReq = await requestInfo({ url, macaroon })
-    const { alias, identity_pubkey: pubKey, ...rest } = await infoReq.json()
-    const balanceReq = await getBalance({ url, macaroon })
-    const { balance } = await balanceReq.json()
-    dispatch(
-      actions.addConnection({ provider: 'lnd', macaroon, url, alias, balance })
-    )
+    if (!url.startsWith('https://')) {
+      url = `https://${url}`
+    }
+    await setNodeConnection({ url, macaroon })
     reset()
   }
 
   const handleRemoveConnection = () => {
     dispatch(actions.removeConnection())
   }
+
+  useEffect(() => {
+    const updateConnection = async () => {
+      const connection = connections[0]
+      if (connection) {
+        const { url, macaroon } = connection
+        const nodeInfo = await getNodeInfo({ url, macaroon })
+        const balance = await getNodeBalance({
+          url,
+          macaroon,
+        })
+
+        dispatch(
+          actions.updateConnection({
+            index: 0,
+            connection: { ...connection, ...nodeInfo, balance },
+          })
+        )
+      }
+    }
+
+    if (connections.length > 0) {
+      updateConnection()
+    }
+  }, [])
 
   // if No connected wallets, show new wallet onboarding flow
   return (
@@ -50,9 +108,9 @@ const Wallet: FC = () => {
       <div className="flex flex-1 rounded-2xl p-6 bg-base-300 text-base-content">
         {connections.length > 0 ? (
           <Card>
-            {connections.map((connection) => (
+            {connections.map((connection, i) => (
               <div
-                key={connection.alias}
+                key={connection.alias + i}
                 className="flex flex-1 justify-between align-middle"
               >
                 <div className="flex items-center">
@@ -91,7 +149,6 @@ const Wallet: FC = () => {
                   className="border-2 border-white rounded-full self-center mb-5"
                 />
                 <h2 className="text-lg">Connect your LND Lightning Wallet</h2>
-                <p></p>
                 <p>
                   <Link to="/wallet">Use the LunchMoney Wallet</Link>
                 </p>

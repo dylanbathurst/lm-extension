@@ -12,8 +12,10 @@
     "page": "options.html",
     "open_in_tab": true
   },
+  "host_permissions": ["<all_urls>"],
   "background": {
-    "service_worker": "background.bundle.js"
+    "service_worker": "background.bundle.js",
+    "type": "module"
   },
   "content_scripts": [
     {

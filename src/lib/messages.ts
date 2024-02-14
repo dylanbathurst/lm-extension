@@ -8,5 +8,16 @@ export const sendMessage = ({ action, payload }: MessageType) =>
     payload,
   })
 
-export const requestUser = () =>
-  sendMessage({ action: 'requestUser', payload: { origin } })
+export const createPayment = (origin: string) => {
+  return sendMessage({
+    action: 'createPayment',
+    payload: { origin },
+  })
+}
+
+export const pollInvoiceStatus = (origin: string, r_hash: string) => {
+  return sendMessage({
+    action: 'pollInvoiceStatus',
+    payload: { origin, r_hash },
+  })
+}

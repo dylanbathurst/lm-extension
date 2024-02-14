@@ -52,7 +52,7 @@ const ActivityItem: React.FC<{ activity: ActivityType }> = ({ activity }) => {
         </span>
         /
         <span title="Received" className="cursor-help">
-          {Number(activity.amt_paid).toLocaleString()}
+          {Number(activity.amt_paid_sat).toLocaleString()}
         </span>
       </div>
       <span className="text-lg">
