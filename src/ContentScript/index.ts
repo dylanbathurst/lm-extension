@@ -11,7 +11,6 @@ window.addEventListener('message', (event) => {
     .then(
       (data: { payment_request: string; origin: string; r_hash: string }) => {
         if (!data.payment_request) return null
-        console.log('adsfasdf', data)
 
         window.postMessage(
           {
@@ -32,7 +31,7 @@ window.addEventListener('message', (event) => {
       }
     )
     .catch((err) => {
-      console.error('error getting user', err)
+      console.error('error creating payment', err)
     })
 })
 
@@ -42,7 +41,6 @@ window.addEventListener('message', (event) => {
 
   pollInvoiceStatus(event.origin, event.data.payload)
     .then((data) => {
-      console.log('pollInvoiceStatus', data)
       if (data.status !== 'settled') return null
 
       window.postMessage(
@@ -55,7 +53,7 @@ window.addEventListener('message', (event) => {
       )
     })
     .catch((err) => {
-      console.error('error getting user', err)
+      console.error('error polling invoice status', err)
     })
 })
 

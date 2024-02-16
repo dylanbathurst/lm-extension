@@ -33,18 +33,13 @@ const actionParser = async (message: MessageType) => {
       try {
         const invoiceRes = await createInvoice({ url, macaroon, memo })
         const invoice = await invoiceRes.json()
-        console.log(invoice)
         const { payment_request, r_hash } = invoice
-        console.log(r_hash)
-
         return { payment_request, r_hash }
       } catch (error) {
-        throw new Error('Error getting invoice: ' + error)
+        throw new Error('Error creating invoice: ' + error)
       }
     case 'pollInvoiceStatus':
       const { r_hash } = message.payload
-
-      console.log('polling invoice status', r_hash)
 
       while (true) {
         const invoiceRes = await getInvoice({ url, macaroon, r_hash })

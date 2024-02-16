@@ -1,10 +1,7 @@
 import { ProfileType } from 'Background/userProfileSlice'
-import { LunchMoneyProvider, PAYMENT_REQUEST, RequestInfo } from './types'
+import { LunchMoneyProvider, RequestInfo } from './types'
 
 export default class MyProvider implements LunchMoneyProvider {
-  constructor() {
-    window.addEventListener('message', this.checkForProfile)
-  }
   private requestInfo = {
     firstName: true,
     lastName: true,
@@ -16,27 +13,25 @@ export default class MyProvider implements LunchMoneyProvider {
 
   public userInfo: Partial<ProfileType | undefined> = undefined
 
-  protected checkForProfile =
-    () =>
-    (
-      event: MessageEvent<{
-        application: string
-        action: string
-        payload: Partial<ProfileType>
-      }>
-    ) => {
-      if (event.data.action !== 'profile') return
-      if (event.data.application !== 'LUNCH_MONEY') return
-      if (!event.data.payload) return
+  protected checkForProfile = (
+    event: MessageEvent<{
+      application: string
+      action: string
+      payload: Partial<ProfileType>
+    }>
+  ) => {
+    if (event.data.action !== 'profile') return
+    if (event.data.application !== 'LUNCH_MONEY') return
+    if (!event.data.payload) return
 
-      this.userInfo = event.data.payload
+    this.userInfo = event.data.payload
 
-      const profileEvent = new CustomEvent('profile', {
-        detail: this.userInfo,
-      })
+    const profileEvent = new CustomEvent('profile', {
+      detail: this.userInfo,
+    })
 
-      window.dispatchEvent(profileEvent)
-    }
+    window.dispatchEvent(profileEvent)
+  }
 
   protected checkForInvoice = (
     event: MessageEvent<{
@@ -63,6 +58,7 @@ export default class MyProvider implements LunchMoneyProvider {
     this.requestInfo = userData
 
     window.addEventListener('message', this.checkForInvoice)
+    window.addEventListener('message', this.checkForProfile)
     window.postMessage(
       {
         application: 'LUNCH_MONEY',
