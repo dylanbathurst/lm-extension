@@ -6,9 +6,11 @@ export interface SendPaymentResponse {
   success: boolean
 }
 
-export type RequestInfo = Record<keyof ProfileType, boolean>
+export type RequestModel = {
+  [Property in keyof ProfileType]?: boolean
+}
 
 export interface LunchMoneyProvider {
-  createInfoRequest(userData: RequestInfo): void
+  createInfoRequest(userData: RequestModel): void
   userInfo: Partial<ProfileType | undefined>
 }

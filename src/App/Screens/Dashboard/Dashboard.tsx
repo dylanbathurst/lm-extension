@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { createInvoice, getBalance, listInvoices } from 'lib/api'
+import { getBalance, listInvoices } from 'lib/api'
 import { useAppSelector } from 'Background/hooks'
 import { defaultConnection } from 'Background/walletConnectionSlice'
 import ActivityItem, { ActivityType } from '../../Components/ActivityItem'
@@ -8,15 +8,6 @@ const Dashboard: React.FC = () => {
   const connection = useAppSelector(defaultConnection)
   const [balance, setBalance] = useState(connection?.balance || 0)
   const [invoices, setInvoices] = useState<ActivityType[] | null>(null)
-
-  const handleInvoiceCreate = async () => {
-    if (!connection) return
-    const iv = await createInvoice({
-      url: connection.url,
-      macaroon: connection.macaroon,
-      memo: 'test',
-    })
-  }
 
   useEffect(() => {
     if (connection) {
@@ -43,11 +34,6 @@ const Dashboard: React.FC = () => {
           <div className="stat-value text-white">
             {Number(balance).toLocaleString()}
           </div>
-        </div>
-        <div>
-          <button className="w-8" onClick={handleInvoiceCreate}>
-            + Invoice
-          </button>
         </div>
       </div>
       <div className="flex flex-1 rounded-2xl p-6 bg-base-300">

@@ -1,16 +1,7 @@
 import { ProfileType } from 'Background/userProfileSlice'
-import { LunchMoneyProvider, RequestInfo } from './types'
+import { LunchMoneyProvider, RequestModel } from './types'
 
 export default class MyProvider implements LunchMoneyProvider {
-  private requestInfo = {
-    firstName: true,
-    lastName: true,
-    age: true,
-    gender: true,
-    location: true,
-    email: true,
-  }
-
   public userInfo: Partial<ProfileType | undefined> = undefined
 
   protected checkForProfile = (
@@ -54,16 +45,14 @@ export default class MyProvider implements LunchMoneyProvider {
     window.dispatchEvent(invoiceEvent)
   }
 
-  createInfoRequest = (userData: RequestInfo) => {
-    this.requestInfo = userData
-
+  createInfoRequest = (requestModel: RequestModel) => {
     window.addEventListener('message', this.checkForInvoice)
     window.addEventListener('message', this.checkForProfile)
     window.postMessage(
       {
         application: 'LUNCH_MONEY',
         action: 'createPayment',
-        payload: this.requestInfo,
+        payload: requestModel,
       },
       '*'
     )
